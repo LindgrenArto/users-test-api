@@ -10,7 +10,7 @@ namespace UsersTestApi.Repositories
         Task<List<UserDTO>> GetAllUsersAsync();
 
         // Get a userDTO by ID
-        Task<UserDTO> GetUserByIdAsync(int id);
+        Task<UserDTO> GetUserByIdAsync(int? id);
 
         // Create a new user
         Task<bool> CreateUserAsync(UserDTO userDTO);
@@ -19,6 +19,6 @@ namespace UsersTestApi.Repositories
         Task<bool> UpdateUserAsync(UserDTO userDTO);
 
         // Delete a user by ID
-        Task<bool> DeleteUserAsync(int id);
+        Task<bool> DeleteUserAsync(int? id);
     }
 }

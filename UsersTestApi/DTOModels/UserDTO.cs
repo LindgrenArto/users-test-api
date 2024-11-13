@@ -6,13 +6,13 @@ namespace UsersTestApi.DTOModels
 {
     public class UserDTO
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public string Username { get; set; }
-        public string Email { get; set; }
-        public string Phone { get; set; }
-        public string Website { get; set; }
-        public AddressDTO Address { get; set; }
-        public CompanyDTO Company { get; set; }
+        public int? Id { get; set; }
+        public string? Name { get; set; }
+        public string? Username { get; set; }
+        public string? Email { get; set; }
+        public string? Phone { get; set; }
+        public string? Website { get; set; }
+        public AddressDTO? Address { get; set; }
+        public CompanyDTO? Company { get; set; }
     }
 }

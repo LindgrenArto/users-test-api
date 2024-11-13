@@ -8,12 +8,12 @@ namespace UsersTestApi.Models
     public class Company
     {
         [BsonElement("name")]
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
         [BsonElement("catchPhrase")]
-        public string CatchPhrase { get; set; }
+        public string? CatchPhrase { get; set; }
 
         [BsonElement("bs")]
-        public string Bs { get; set; }
+        public string? Bs { get; set; }
     }
 }

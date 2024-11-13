@@ -9,18 +9,18 @@ namespace UsersTestApi.Models
     public class Address
     {
         [BsonElement("street")]
-        public string Street { get; set; }
+        public string? Street { get; set; }
 
         [BsonElement("suite")]
-        public string Suite { get; set; }
+        public string? Suite { get; set; }
 
         [BsonElement("city")]
-        public string City { get; set; }
+        public string? City { get; set; }
 
         [BsonElement("zipcode")]
-        public string Zipcode { get; set; }
+        public string? Zipcode { get; set; }
 
         [BsonElement("geo")]
-        public Geo Geo { get; set; }
+        public Geo? Geo { get; set; }
     }
 }

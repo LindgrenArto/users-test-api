@@ -30,8 +30,12 @@ namespace UsersTestApi.Services
         }
 
         // Get a user by ID
-        public async Task<UserDTO> GetUserByIdAsync(int id)
+        public async Task<UserDTO> GetUserByIdAsync(int? id)
         {
+            if (!id.HasValue)
+            {
+                throw new ArgumentNullException(nameof(id), "ID must be provided.");
+            }
             try
             {
                 return await _userRepository.GetUserByIdAsync(id);
@@ -84,8 +88,12 @@ namespace UsersTestApi.Services
         }
 
         // Delete a user by ID
-        public async Task<bool> DeleteUserAsync(int id)
+        public async Task<bool> DeleteUserAsync(int? id)
         {
+            if (!id.HasValue)
+            {
+                throw new ArgumentNullException(nameof(id), "ID must be provided.");
+            }
             try
             {
                 return await _userRepository.DeleteUserAsync(id);

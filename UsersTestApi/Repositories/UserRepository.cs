@@ -28,7 +28,7 @@ namespace UsersTestApi.Repositories
             try
             {
                 var users = await _users.Find(_ => true).ToListAsync();
-                return _mapper.Map<List<UserDTO>>(users);
+                return users.Any() ? _mapper.Map<List<UserDTO>>(users) : new List<UserDTO>(); // Return an empty list if no users
             }
             catch (Exception e)
             {
@@ -37,12 +37,19 @@ namespace UsersTestApi.Repositories
         }
 
         // Get a user by ID
-        public async Task<UserDTO> GetUserByIdAsync(int id)
+        public async Task<UserDTO> GetUserByIdAsync(int? id)
         {
+            if (!id.HasValue)
+            {
+                throw new ArgumentException("ID must be provided.", nameof(id));
+            }
             try
             {
-                var user = await _users.Find(u => u.Id == id).FirstOrDefaultAsync();
-                if (user == null) return null;
+                var user = await _users.Find(u => u.Id == id.Value).FirstOrDefaultAsync();
+                if (user == null)
+                {
+                    throw new ApplicationException($"User with ID {id} not found.");
+                }
 
                 return _mapper.Map<UserDTO>(user);
             }
@@ -88,11 +95,15 @@ namespace UsersTestApi.Repositories
         }
 
         // Delete a user by ID
-        public async Task<bool> DeleteUserAsync(int id)
+        public async Task<bool> DeleteUserAsync(int? id)
         {
+            if (!id.HasValue)
+            {
+                throw new ArgumentException("ID must be provided.", nameof(id));
+            }
             try
             {
-                var result = await _users.DeleteOneAsync(user => user.Id == id);
+                var result = await _users.DeleteOneAsync(user => user.Id == id.Value);
                 return result.IsAcknowledged && result.DeletedCount > 0;
             }
             catch (Exception e)

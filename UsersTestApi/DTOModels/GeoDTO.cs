@@ -5,7 +5,7 @@ namespace UsersTestApi.DTOModels
 {
     public class GeoDTO
     {
-        public string Lat { get; set; }
-        public string Lng { get; set; }
+        public string? Lat { get; set; }
+        public string? Lng { get; set; }
     }
 }

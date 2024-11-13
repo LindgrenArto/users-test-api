@@ -8,9 +8,9 @@ namespace UsersTestApi.Models
     public class Geo
     {
         [BsonElement("lat")]
-        public string Lat { get; set; }
+        public string? Lat { get; set; }
 
         [BsonElement("lng")]
-        public string Lng { get; set; }
+        public string? Lng { get; set; }
     }
 }
