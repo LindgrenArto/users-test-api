@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace UsersTestApi.DTOModels
 {
-    public class CompanyDto
+    public class CompanyDTO
     {
         public string Name { get; set; }
         public string CatchPhrase { get; set; }

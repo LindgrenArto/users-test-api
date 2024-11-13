@@ -4,7 +4,7 @@ using UsersTestApi.DTOModels;
 
 namespace UsersTestApi.DTOModels
 {
-    public class AddressDto
+    public class AddressDTO
     {
         public string Street { get; set; }
         public string Suite { get; set; }

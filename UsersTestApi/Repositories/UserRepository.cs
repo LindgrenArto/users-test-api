@@ -20,7 +20,7 @@ namespace UsersTestApi.Repositories
                 userDatabaseSettings.Value.DatabaseName);
 
             _users = mongoDatabase.GetCollection<User>(
-                userDatabaseSettings.Value.BooksCollectionName);
+                userDatabaseSettings.Value.UserCollection);
         }
 
         // Get all users
@@ -80,8 +80,8 @@ namespace UsersTestApi.Repositories
                     Zipcode = user.Address.Zipcode,
                     Geo = new GeoDTO
                     {
-                        Lat = u.Address.Geo.Lat,
-                        Lng = u.Address.Geo.Lng
+                        Lat = user.Address.Geo.Lat,
+                        Lng = user.Address.Geo.Lng
                     }
                 },
                 Company = new CompanyDTO
@@ -110,12 +110,12 @@ namespace UsersTestApi.Repositories
             {
                 Street = userDTO.Address.Street,
                 Suite = userDTO.Address.Suite,
-                City = userDTOAddress.City,
+                City = userDTO.Address.City,
                 Zipcode = userDTO.Address.Zipcode,
                 Geo = new Geo
                 {
                     Lat = userDTO.Address.Geo.Lat,
-                    Lng = userDTO.Addresss.Geo.Lng
+                    Lng = userDTO.Address.Geo.Lng
                 }
             };
             user.Company = new Company
