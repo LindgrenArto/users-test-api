@@ -9,6 +9,7 @@ builder.Services.Configure<BookStoreDatabaseSettings>(
     builder.Configuration.GetSection("MongoDbSettings"));
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IUserService, UserService>();
 
 var app = builder.Build();
 
