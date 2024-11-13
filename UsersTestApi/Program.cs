@@ -1,3 +1,4 @@
+using UsersTestApi;
 using UsersTestApi.Models;
 using UsersTestApi.Repositories;
 using UsersTestApi.Services;
@@ -7,8 +8,12 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Hosting;
 using MongoDB.Driver;
+using AutoMapper;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Add AutoMapper
+builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
 
 // Add services to the container.
 builder.Services.AddControllers();
