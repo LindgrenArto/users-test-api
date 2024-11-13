@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using UsersTestApi.DTOModels;
 using UsersTestApi.Repositories;
 using UsersTestApi.Services;
+using UsersTestApi.Exceptions;
 
 namespace UsersTestApi.Services
 {
@@ -46,6 +47,21 @@ namespace UsersTestApi.Services
         {
             try
             {
+                //Check for an existing user with the same email or ID
+                var existingUserById = await _userRepository.GetUserByIdAsync(userDTO.Id);
+                var existingUserByEmail = (await _userRepository.GetAllUsersAsync())
+                                            .FirstOrDefault(u => u.Email == userDTO.Email);
+
+                if (existingUserById != null)
+                {
+                    throw new DuplicateUserException($"A user with ID {userDTO.Id} already exists.");
+                }
+
+                if (existingUserByEmail != null)
+                {
+                    throw new DuplicateUserException($"A user with email {userDTO.Email} already exists.");
+                }
+
                 return await _userRepository.CreateUserAsync(userDTO);
             }
             catch (ApplicationException e)

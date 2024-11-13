@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UsersTestApi.Services;
 using UsersTestApi.DTOModels;
+using UsersTestApi.Exceptions;
 
 namespace UsersTestApi.Controllers
 {
@@ -60,12 +61,17 @@ namespace UsersTestApi.Controllers
             try
             {
                 bool isCreated = await _userService.CreateUserAsync(userDTO);
+
                 if (isCreated)
                 {
                     return CreatedAtAction(nameof(GetUserById), new { id = userDTO.Id }, userDTO);
                 }
 
                 return StatusCode(500, "An error occurred while creating the user.");
+            }
+            catch (DuplicateUserException ex)
+            {
+                return Conflict(ex.Message); // Return 409 Conflict with specific error message
             }
             catch (ApplicationException e)
             {
