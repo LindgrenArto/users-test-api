@@ -26,85 +26,143 @@ namespace UsersTestApi.Repositories
         // Get all users
         public async Task<List<UserDTO>> GetAllUsersAsync()
         {
-            var users = await _users.Find(_ => true).ToListAsync();
-
-            return users.Select(u => new UserDTO
+            try
             {
-                Id = u.Id,
-                Name = u.Name,
-                Username = u.Username,
-                Email = u.Email,
-                Phone = u.Phone,
-                Website = u.Website,
-                Address = new AddressDTO
+                var users = await _users.Find(_ => true).ToListAsync();
+                return users.Select(u => new UserDTO
                 {
-                    Street = u.Address.Street,
-                    Suite = u.Address.Suite,
-                    City = u.Address.City,
-                    Zipcode = u.Address.Zipcode,
-                    Geo = new GeoDTO
+                    Id = u.Id,
+                    Name = u.Name,
+                    Username = u.Username,
+                    Email = u.Email,
+                    Phone = u.Phone,
+                    Website = u.Website,
+                    Address = new AddressDTO
                     {
-                        Lat = u.Address.Geo.Lat,
-                        Lng = u.Address.Geo.Lng
+                        Street = u.Address.Street,
+                        Suite = u.Address.Suite,
+                        City = u.Address.City,
+                        Zipcode = u.Address.Zipcode,
+                        Geo = new GeoDTO
+                        {
+                            Lat = u.Address.Geo.Lat,
+                            Lng = u.Address.Geo.Lng
+                        }
+                    },
+                    Company = new CompanyDTO
+                    {
+                        Name = u.Company.Name,
+                        CatchPhrase = u.Company.CatchPhrase,
+                        Bs = u.Company.Bs
                     }
-                },
-                Company = new CompanyDTO
-                {
-                    Name = u.Company.Name,
-                    CatchPhrase = u.Company.CatchPhrase,
-                    Bs = u.Company.Bs
-                }
-            }).ToList();
+                }).ToList();
+            }
+            catch (Exception e)
+            {
+                throw new ApplicationException("An error occurred while retrieving all users.", e);
+            }
         }
 
         // Get a user by ID
         public async Task<UserDTO> GetUserByIdAsync(int id)
         {
-            var user = await _users.Find(u => u.Id == id).FirstOrDefaultAsync();
-            if (user == null)
-                return null;
-
-            return new UserDTO
+            try
             {
-                Id = user.Id,
-                Name = user.Name,
-                Username = user.Username,
-                Email = user.Email,
-                Phone = user.Phone,
-                Website = user.Website,
-                Address = new AddressDTO
+                var user = await _users.Find(u => u.Id == id).FirstOrDefaultAsync();
+                if (user == null)
+                    return null;
+
+                return new UserDTO
                 {
-                    Street = user.Address.Street,
-                    Suite = user.Address.Suite,
-                    City = user.Address.City,
-                    Zipcode = user.Address.Zipcode,
-                    Geo = new GeoDTO
+                    Id = user.Id,
+                    Name = user.Name,
+                    Username = user.Username,
+                    Email = user.Email,
+                    Phone = user.Phone,
+                    Website = user.Website,
+                    Address = new AddressDTO
                     {
-                        Lat = user.Address.Geo.Lat,
-                        Lng = user.Address.Geo.Lng
+                        Street = user.Address.Street,
+                        Suite = user.Address.Suite,
+                        City = user.Address.City,
+                        Zipcode = user.Address.Zipcode,
+                        Geo = new GeoDTO
+                        {
+                            Lat = user.Address.Geo.Lat,
+                            Lng = user.Address.Geo.Lng
+                        }
+                    },
+                    Company = new CompanyDTO
+                    {
+                        Name = user.Company.Name,
+                        CatchPhrase = user.Company.CatchPhrase,
+                        Bs = user.Company.Bs
                     }
-                },
-                Company = new CompanyDTO
-                {
-                    Name = user.Company.Name,
-                    CatchPhrase = user.Company.CatchPhrase,
-                    Bs = user.Company.Bs
-                }
-            };
+                };
+            }
+            catch (Exception e)
+            {
+                throw new ApplicationException($"An error occurred while retrieving the user with ID {id}.", e);
+            }
         }
 
         // Create a new user
         public async Task<bool> CreateUserAsync(UserDTO userDTO)
         {
-            var newUser = new User
+            try
             {
-                Id = userDTO.Id,
-                Name = userDTO.Name,
-                Username = userDTO.Username,
-                Email = userDTO.Email,
-                Phone = userDTO.Phone,
-                Website = userDTO.Website,
-                Address = new Address
+                var newUser = new User
+                {
+                    Id = userDTO.Id,
+                    Name = userDTO.Name,
+                    Username = userDTO.Username,
+                    Email = userDTO.Email,
+                    Phone = userDTO.Phone,
+                    Website = userDTO.Website,
+                    Address = new Address
+                    {
+                        Street = userDTO.Address.Street,
+                        Suite = userDTO.Address.Suite,
+                        City = userDTO.Address.City,
+                        Zipcode = userDTO.Address.Zipcode,
+                        Geo = new Geo
+                        {
+                            Lat = userDTO.Address.Geo.Lat,
+                            Lng = userDTO.Address.Geo.Lng
+                        }
+                    },
+                    Company = new Company
+                    {
+                        Name = userDTO.Company.Name,
+                        CatchPhrase = userDTO.Company.CatchPhrase,
+                        Bs = userDTO.Company.Bs
+                    }
+                };
+
+                await _users.InsertOneAsync(newUser);
+                return true;
+            }
+            catch (Exception e)
+            {
+                throw new ApplicationException("An error occurred while creating a new user.", e);
+            }
+        }
+
+        // Update an existing user
+        public async Task<bool> UpdateUserAsync(UserDTO userDTO)
+        {
+            try
+            {
+                var user = await _users.Find(u => u.Id == userDTO.Id).FirstOrDefaultAsync();
+                if (user == null)
+                    return false;
+
+                user.Name = userDTO.Name;
+                user.Username = userDTO.Username;
+                user.Email = userDTO.Email;
+                user.Phone = userDTO.Phone;
+                user.Website = userDTO.Website;
+                user.Address = new Address
                 {
                     Street = userDTO.Address.Street,
                     Suite = userDTO.Address.Suite,
@@ -115,60 +173,35 @@ namespace UsersTestApi.Repositories
                         Lat = userDTO.Address.Geo.Lat,
                         Lng = userDTO.Address.Geo.Lng
                     }
-                },
-                Company = new Company
+                };
+                user.Company = new Company
                 {
                     Name = userDTO.Company.Name,
                     CatchPhrase = userDTO.Company.CatchPhrase,
                     Bs = userDTO.Company.Bs
-                }
-            };
+                };
 
-            await _users.InsertOneAsync(newUser);
-            return true;
-        }
-
-        // Update an existing user
-        public async Task<bool> UpdateUserAsync(UserDTO userDTO)
-        {
-            var user = await _users.Find(u => u.Id == userDTO.Id).FirstOrDefaultAsync();
-            if (user == null)
-                return false;
-
-            // Map back from DTO to the actual model
-            user.Name = userDTO.Name;
-            user.Username = userDTO.Username;
-            user.Email = userDTO.Email;
-            user.Phone = userDTO.Phone;
-            user.Website = userDTO.Website;
-            user.Address = new Address
+                var result = await _users.ReplaceOneAsync(u => u.Id == userDTO.Id, user);
+                return result.IsAcknowledged && result.ModifiedCount > 0;
+            }
+            catch (Exception e)
             {
-                Street = userDTO.Address.Street,
-                Suite = userDTO.Address.Suite,
-                City = userDTO.Address.City,
-                Zipcode = userDTO.Address.Zipcode,
-                Geo = new Geo
-                {
-                    Lat = userDTO.Address.Geo.Lat,
-                    Lng = userDTO.Address.Geo.Lng
-                }
-            };
-            user.Company = new Company
-            {
-                Name = userDTO.Company.Name,
-                CatchPhrase = userDTO.Company.CatchPhrase,
-                Bs = userDTO.Company.Bs
-            };
-
-            var result = await _users.ReplaceOneAsync(u => u.Id == userDTO.Id, user);
-            return result.IsAcknowledged && result.ModifiedCount > 0;
+                throw new ApplicationException($"An error occurred while updating the user with ID {userDTO.Id}.", e);
+            }
         }
 
         // Delete a user by ID
         public async Task<bool> DeleteUserAsync(int id)
         {
-            var result = await _users.DeleteOneAsync(user => user.Id == id);
-            return result.IsAcknowledged && result.DeletedCount > 0;
+            try
+            {
+                var result = await _users.DeleteOneAsync(user => user.Id == id);
+                return result.IsAcknowledged && result.DeletedCount > 0;
+            }
+            catch (Exception e)
+            {
+                throw new ApplicationException($"An error occurred while deleting the user with ID {id}.", e);
+            }
         }
     }
 }
