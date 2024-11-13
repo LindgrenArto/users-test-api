@@ -20,19 +20,33 @@ namespace UsersTestApi.Controllers
         [HttpGet]
         public async Task<ActionResult<List<UserDTO>>> GetAllUsers()
         {
-            var users = await _userService.GetAllUsersAsync();
-            return Ok(users);
+            try
+            {
+                var users = await _userService.GetAllUsersAsync();
+                return Ok(users);
+            }
+            catch (ApplicationException e)
+            {
+                return StatusCode(500, e.Message);
+            }
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<UserDTO>> GetUserById(int id)
         {
-            var user = await _userService.GetUserByIdAsync(id);
-            if (user == null)
+            try
             {
-                return NotFound();
+                var user = await _userService.GetUserByIdAsync(id);
+                if (user == null)
+                {
+                    return NotFound();
+                }
+                return Ok(user);
             }
-            return Ok(user);
+            catch (ApplicationException e)
+            {
+                return StatusCode(500, e.Message);
+            }
         }
 
         [HttpPost]
@@ -43,15 +57,20 @@ namespace UsersTestApi.Controllers
                 return BadRequest("User data is null");
             }
 
-            // Call the service layer to create the user
-            bool isCreated = await _userService.CreateUserAsync(userDTO);
-
-            if (isCreated)
+            try
             {
-                return CreatedAtAction(nameof(GetUserById), new { id = userDTO.Id }, userDTO);
-            }
+                bool isCreated = await _userService.CreateUserAsync(userDTO);
+                if (isCreated)
+                {
+                    return CreatedAtAction(nameof(GetUserById), new { id = userDTO.Id }, userDTO);
+                }
 
-            return StatusCode(500, "An error occurred while creating the user.");
+                return StatusCode(500, "An error occurred while creating the user.");
+            }
+            catch (ApplicationException e)
+            {
+                return StatusCode(500, e.Message);
+            }
         }
 
         [HttpPut("{id}")]
@@ -59,28 +78,42 @@ namespace UsersTestApi.Controllers
         {
             if (id != userDTO.Id)
             {
-                return BadRequest();
+                return BadRequest("User ID in the URL does not match the ID in the payload.");
             }
 
-            var success = await _userService.UpdateUserAsync(userDTO);
-            if (!success)
+            try
             {
-                return NotFound();
-            }
+                var success = await _userService.UpdateUserAsync(userDTO);
+                if (!success)
+                {
+                    return NotFound();
+                }
 
-            return NoContent();
+                return NoContent();
+            }
+            catch (ApplicationException e)
+            {
+                return StatusCode(500, e.Message);
+            }
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser(int id)
         {
-            var success = await _userService.DeleteUserAsync(id);
-            if (!success)
+            try
             {
-                return NotFound();
-            }
+                var success = await _userService.DeleteUserAsync(id);
+                if (!success)
+                {
+                    return NotFound();
+                }
 
-            return NoContent();
+                return NoContent();
+            }
+            catch (ApplicationException e)
+            {
+                return StatusCode(500, e.Message);
+            }
         }
 
         [HttpDelete("multiple")]
@@ -91,13 +124,20 @@ namespace UsersTestApi.Controllers
                 return BadRequest("No user IDs provided.");
             }
 
-            var success = await _userService.DeleteMultipleUsersAsync(ids);
-            if (!success)
+            try
             {
-                return NotFound("Some users could not be deleted.");
-            }
+                var success = await _userService.DeleteMultipleUsersAsync(ids);
+                if (!success)
+                {
+                    return NotFound("Some users could not be deleted.");
+                }
 
-            return NoContent(); // Successfully deleted all provided users
+                return NoContent();
+            }
+            catch (ApplicationException e)
+            {
+                return StatusCode(500, e.Message);
+            }
         }
     }
 }
