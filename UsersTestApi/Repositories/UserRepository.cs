@@ -93,6 +93,41 @@ namespace UsersTestApi.Repositories
             };
         }
 
+        // Create a new user
+        public async Task<bool> CreateUserAsync(UserDTO userDTO)
+        {
+            var newUser = new User
+            {
+                Id = userDTO.Id,
+                Name = userDTO.Name,
+                Username = userDTO.Username,
+                Email = userDTO.Email,
+                Phone = userDTO.Phone,
+                Website = userDTO.Website,
+                Address = new Address
+                {
+                    Street = userDTO.Address.Street,
+                    Suite = userDTO.Address.Suite,
+                    City = userDTO.Address.City,
+                    Zipcode = userDTO.Address.Zipcode,
+                    Geo = new Geo
+                    {
+                        Lat = userDTO.Address.Geo.Lat,
+                        Lng = userDTO.Address.Geo.Lng
+                    }
+                },
+                Company = new Company
+                {
+                    Name = userDTO.Company.Name,
+                    CatchPhrase = userDTO.Company.CatchPhrase,
+                    Bs = userDTO.Company.Bs
+                }
+            };
+
+            await _users.InsertOneAsync(newUser);
+            return true;
+        }
+
         // Update an existing user
         public async Task<bool> UpdateUserAsync(UserDTO userDTO)
         {

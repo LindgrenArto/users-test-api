@@ -12,6 +12,9 @@ namespace UsersTestApi.Repositories
         // Get a userDTO by ID
         Task<UserDTO> GetUserByIdAsync(int id);
 
+        // Create a new user
+        Task<bool> CreateUserAsync(UserDTO userDTO);
+
         // Update an existing user
         Task<bool> UpdateUserAsync(UserDTO userDTO);
 

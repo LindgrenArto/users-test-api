@@ -35,6 +35,25 @@ namespace UsersTestApi.Controllers
             return Ok(user);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> CreateUser([FromBody] UserDTO userDTO)
+        {
+            if (userDTO == null)
+            {
+                return BadRequest("User data is null");
+            }
+
+            // Call the service layer to create the user
+            bool isCreated = await _userService.CreateUserAsync(userDTO);
+
+            if (isCreated)
+            {
+                return CreatedAtAction(nameof(GetUserById), new { id = userDTO.Id }, userDTO);
+            }
+
+            return StatusCode(500, "An error occurred while creating the user.");
+        }
+
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateUser(int id, [FromBody] UserDTO userDTO)
         {

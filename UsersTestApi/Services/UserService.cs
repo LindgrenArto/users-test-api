@@ -27,6 +27,11 @@ namespace UsersTestApi.Services
             return await _userRepository.GetUserByIdAsync(id);
         }
 
+        public async Task<bool> CreateUserAsync(UserDTO userDTO)
+        {
+            return await _userRepository.CreateUserAsync(userDTO);
+        }
+
         // Update an existing user
         public async Task<bool> UpdateUserAsync(UserDTO userDTO)
         {
