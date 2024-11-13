@@ -8,6 +8,8 @@ builder.Services.AddControllers();
 builder.Services.Configure<BookStoreDatabaseSettings>(
     builder.Configuration.GetSection("MongoDbSettings"));
 
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
