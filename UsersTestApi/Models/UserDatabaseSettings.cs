@@ -1,10 +1,14 @@
-namespace UserTestApi.Models;
+using System;
+using System.Collections.Generic;
 
-public class UserDatabaseSettings
+namespace UsersTestApi.Models
 {
-    public string ConnectionString { get; set; } = null!;
+    public class UserDatabaseSettings
+    {
+        public string ConnectionString { get; set; } = null!;
 
-    public string DatabaseName { get; set; } = null!;
+        public string DatabaseName { get; set; } = null!;
 
-    public string UserCollection { get; set; } = null!;
+        public string UserCollection { get; set; } = null!;
+    }
 }

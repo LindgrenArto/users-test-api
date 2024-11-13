@@ -1,12 +1,15 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using UserTestApi.DTOModels;
+using UsersTestApi.DTOModels;
 
-public interface IUserService
+namespace UsersTestApi.Services
 {
-    Task<List<UserDTO>> GetAllUsersAsync();
-    Task<UserDTO> GetUserByIdAsync(int id);
-    Task<bool> UpdateUserAsync(User user);
-    Task<bool> DeleteUserAsync(int id);
-    Task<bool> DeleteMultipleUsersAsync(List<int> ids);
+    public interface IUserService
+    {
+        Task<List<UserDTO>> GetAllUsersAsync();
+        Task<UserDTO> GetUserByIdAsync(int id);
+        Task<bool> UpdateUserAsync(UserDTO userDTO);
+        Task<bool> DeleteUserAsync(int id);
+        Task<bool> DeleteMultipleUsersAsync(List<int> ids);
+    }
 }

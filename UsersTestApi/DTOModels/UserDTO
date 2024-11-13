@@ -1,6 +1,10 @@
-namespace UserTestApi.DTOModels
+using System;
+using System.Collections.Generic;
+using UsersTestApi.DTOModels;
+
+namespace UsersTestApi.DTOModels
 {
-    public class UserDto
+    public class UserDTO
     {
         public int Id { get; set; }
         public string Name { get; set; }

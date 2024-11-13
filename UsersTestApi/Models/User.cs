@@ -1,7 +1,10 @@
+using System;
+using System.Collections.Generic;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using UsersTestApi.Models;
 
-namespace UserTestApi.Models
+namespace UsersTestApi.Models
 {
     public class User
     {

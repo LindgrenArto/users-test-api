@@ -1,54 +1,60 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using UsersTestApi.DTOModels;
+using UsersTestApi.Repositories;
+using UsersTestApi.Services;
 
-public class UserService : IUserService
+namespace UsersTestApi.Services
 {
-    private readonly IUserRepository _userRepository;
-
-    public UserService(IUserRepository userRepository)
+    public class UserService : IUserService
     {
-        _userRepository = userRepository;
-    }
+        private readonly IUserRepository _userRepository;
 
-    // Get all users
-    public async Task<List<UserDTO>> GetAllUsersAsync()
-    {
-        return await _userRepository.GetAllUsersAsync();
-    }
-
-    // Get a user by ID
-    public async Task<UserTO> GetUserByIdAsync(int id)
-    {
-        return await _userRepository.GetUserByIdAsync(id);
-    }
-
-    // Update an existing user
-    public async Task<bool> UpdateUserAsync(UserDTO userDTO)
-    {
-        return await _userRepository.UpdateUserAsync(userDTO);
-    }
-
-    // Delete a user by ID
-    public async Task<bool> DeleteUserAsync(int id)
-    {
-        return await _userRepository.DeleteUserAsync(id);
-    }
-
-
-    //Delete multiple users
-    public async Task<bool> DeleteMultipleUsersAsync(List<int> ids)
-    {
-        bool success = true;
-
-        foreach (var id in ids)
+        public UserService(IUserRepository userRepository)
         {
-            var result = await _userRepository.DeleteUserAsync(id);
-            if (!result)
-            {
-                success = false; // If any deletion fails, return false
-            }
+            _userRepository = userRepository;
         }
 
-        return success;
+        // Get all users
+        public async Task<List<UserDTO>> GetAllUsersAsync()
+        {
+            return await _userRepository.GetAllUsersAsync();
+        }
+
+        // Get a user by ID
+        public async Task<UserDTO> GetUserByIdAsync(int id)
+        {
+            return await _userRepository.GetUserByIdAsync(id);
+        }
+
+        // Update an existing user
+        public async Task<bool> UpdateUserAsync(UserDTO userDTO)
+        {
+            return await _userRepository.UpdateUserAsync(userDTO);
+        }
+
+        // Delete a user by ID
+        public async Task<bool> DeleteUserAsync(int id)
+        {
+            return await _userRepository.DeleteUserAsync(id);
+        }
+
+
+        //Delete multiple users
+        public async Task<bool> DeleteMultipleUsersAsync(List<int> ids)
+        {
+            bool success = true;
+
+            foreach (var id in ids)
+            {
+                var result = await _userRepository.DeleteUserAsync(id);
+                if (!result)
+                {
+                    success = false; // If any deletion fails, return false
+                }
+            }
+
+            return success;
+        }
     }
 }

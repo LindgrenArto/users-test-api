@@ -1,4 +1,8 @@
-namespace UserTestApi.Models
+using System;
+using System.Collections.Generic;
+using UsersTestApi.Models;
+
+namespace UsersTestApi.Models
 {
     public class Address
     {
