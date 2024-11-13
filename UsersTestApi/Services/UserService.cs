@@ -18,48 +18,89 @@ namespace UsersTestApi.Services
         // Get all users
         public async Task<List<UserDTO>> GetAllUsersAsync()
         {
-            return await _userRepository.GetAllUsersAsync();
+            try
+            {
+                return await _userRepository.GetAllUsersAsync();
+            }
+            catch (ApplicationException e)
+            {
+                throw new ApplicationException("An error occurred while retrieving all users in the service layer.", e);
+            }
         }
 
         // Get a user by ID
         public async Task<UserDTO> GetUserByIdAsync(int id)
         {
-            return await _userRepository.GetUserByIdAsync(id);
+            try
+            {
+                return await _userRepository.GetUserByIdAsync(id);
+            }
+            catch (ApplicationException e)
+            {
+                throw new ApplicationException($"An error occurred while retrieving the user with ID {id} in the service layer.", e);
+            }
         }
 
+        // Create a new user
         public async Task<bool> CreateUserAsync(UserDTO userDTO)
         {
-            return await _userRepository.CreateUserAsync(userDTO);
+            try
+            {
+                return await _userRepository.CreateUserAsync(userDTO);
+            }
+            catch (ApplicationException e)
+            {
+                throw new ApplicationException("An error occurred while creating a new user in the service layer.", e);
+            }
         }
 
         // Update an existing user
         public async Task<bool> UpdateUserAsync(UserDTO userDTO)
         {
-            return await _userRepository.UpdateUserAsync(userDTO);
+            try
+            {
+                return await _userRepository.UpdateUserAsync(userDTO);
+            }
+            catch (ApplicationException e)
+            {
+                throw new ApplicationException($"An error occurred while updating the user with ID {userDTO.Id} in the service layer.", e);
+            }
         }
 
         // Delete a user by ID
         public async Task<bool> DeleteUserAsync(int id)
         {
-            return await _userRepository.DeleteUserAsync(id);
+            try
+            {
+                return await _userRepository.DeleteUserAsync(id);
+            }
+            catch (ApplicationException e)
+            {
+                throw new ApplicationException($"An error occurred while deleting the user with ID {id} in the service layer.", e);
+            }
         }
 
-
-        //Delete multiple users
+        // Delete multiple users
         public async Task<bool> DeleteMultipleUsersAsync(List<int> ids)
         {
             bool success = true;
-
-            foreach (var id in ids)
+            try
             {
-                var result = await _userRepository.DeleteUserAsync(id);
-                if (!result)
+                foreach (var id in ids)
                 {
-                    success = false; // If any deletion fails, return false
+                    var result = await _userRepository.DeleteUserAsync(id);
+                    if (!result)
+                    {
+                        success = false; // If any deletion fails, return false
+                    }
                 }
-            }
 
-            return success;
+                return success;
+            }
+            catch (ApplicationException e)
+            {
+                throw new ApplicationException("An error occurred while deleting multiple users in the service layer.", e);
+            }
         }
     }
 }
