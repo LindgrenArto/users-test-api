@@ -10,6 +10,6 @@ namespace UsersTestApi.DTOModels
         public string Suite { get; set; }
         public string City { get; set; }
         public string Zipcode { get; set; }
-        public GeoDTO GeoDTO { get; set; }
+        public GeoDTO Geo { get; set; }
     }
 }
