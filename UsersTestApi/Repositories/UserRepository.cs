@@ -45,13 +45,9 @@ namespace UsersTestApi.Repositories
             }
             try
             {
+                    
                 var user = await _users.Find(u => u.Id == id.Value).FirstOrDefaultAsync();
-                if (user == null)
-                {
-                    throw new ApplicationException($"User with ID {id} not found.");
-                }
-
-                return _mapper.Map<UserDTO>(user);
+                return user != null ? _mapper.Map<UserDTO>(user) : null; // Return null if user not found
             }
             catch (Exception e)
             {
@@ -64,9 +60,11 @@ namespace UsersTestApi.Repositories
         {
             try
             {
+                // Create the new user with automatically incrementing Id
+                userDTO.Id = await GetLastUserIdAsync() + 1;
                 var newUser = _mapper.Map<User>(userDTO);
-
                 await _users.InsertOneAsync(newUser);
+
                 return true;
             }
             catch (Exception e)
@@ -111,5 +109,18 @@ namespace UsersTestApi.Repositories
                 throw new ApplicationException($"An error occurred while deleting the user with ID {id}.", e);
             }
         }
+        
+        // Helper function to determine the last Id
+        private async Task<int> GetLastUserIdAsync()
+        {
+        var lastUser = await _users
+            .Find(_ => true)
+            .SortByDescending(u => u.Id)
+            .Limit(1)
+            .FirstOrDefaultAsync();
+
+        return lastUser?.Id ?? 0;
+        }
+
     }
 }
